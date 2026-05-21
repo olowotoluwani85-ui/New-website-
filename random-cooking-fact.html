@@ -37,10 +37,27 @@
       color: #d65a31;
     }
 
+    .fact-counter {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
     p {
       font-size: 1.1rem;
       line-height: 1.7;
       margin: 24px 0;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    p.fade-out {
+      opacity: 0;
     }
 
     button {
@@ -52,18 +69,31 @@
       font-size: 1rem;
       padding: 14px 24px;
       transition: transform 0.2s ease, background 0.2s ease;
+      outline-offset: 2px;
     }
 
     button:hover {
       background: #ff7130;
       transform: translateY(-2px);
     }
+
+    button:focus {
+      outline: 3px solid #d65a31;
+      outline-offset: 2px;
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>Random Fun Cooking Fact</h1>
-    <p id="fact">Press the button to see a tasty trivia fact!</p>
+    <div class="fact-counter" aria-live="polite" aria-atomic="true">
+      <span id="counter">Fact 0 of 10</span>
+    </div>
+    <p id="fact" aria-live="polite" aria-atomic="true">Loading a tasty fact...</p>
     <button id="factButton" type="button">Show me a cooking fact</button>
   </div>
 
@@ -82,14 +112,35 @@
     ];
 
     const factElement = document.getElementById('fact');
+    const counterElement = document.getElementById('counter');
     const button = document.getElementById('factButton');
+    let lastIndex = -1;
 
     function showRandomFact() {
-      const randomIndex = Math.floor(Math.random() * facts.length);
-      factElement.textContent = facts[randomIndex];
+      let randomIndex;
+      
+      // Prevent showing the same fact twice in a row
+      do {
+        randomIndex = Math.floor(Math.random() * facts.length);
+      } while (randomIndex === lastIndex && facts.length > 1);
+      
+      lastIndex = randomIndex;
+
+      // Fade out effect
+      factElement.classList.add('fade-out');
+
+      // Update after fade completes
+      setTimeout(() => {
+        factElement.textContent = facts[randomIndex];
+        counterElement.textContent = `Fact ${randomIndex + 1} of ${facts.length}`;
+        factElement.classList.remove('fade-out');
+      }, 150);
     }
 
     button.addEventListener('click', showRandomFact);
+
+    // Load initial fact on page load
+    showRandomFact();
   </script>
 </body>
 </html>
