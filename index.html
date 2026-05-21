@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Fun Cooking Fact</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top left, #ffdc73 0%, transparent 40%),
+                  radial-gradient(circle at bottom right, #ff6b92 0%, transparent 35%),
+                  linear-gradient(135deg, #fff1d6 0%, #ffd3b6 40%, #ff9a8b 100%);
+      color: #2d2d2d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+      max-width: 520px;
+      width: 100%;
+      padding: 34px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: #d65a31;
+    }
+
+    .fact-counter {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin: 24px 0;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    p.fade-out {
+      opacity: 0;
+    }
+
+    button {
+      background: #ff8b42;
+      border: none;
+      border-radius: 999px;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 14px 24px;
+      transition: transform 0.2s ease, background 0.2s ease;
+      outline-offset: 2px;
+    }
+
+    button:hover {
+      background: #ff7130;
+      transform: translateY(-2px);
+    }
+
+    button:focus {
+      outline: 3px solid #d65a31;
+      outline-offset: 2px;
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Random Fun Cooking Fact</h1>
+    <div class="fact-counter" aria-live="polite" aria-atomic="true">
+      <span id="counter">Fact 0 of 10</span>
+    </div>
+    <p id="fact" aria-live="polite" aria-atomic="true">Loading a tasty fact...</p>
+    <button id="factButton" type="button">Show me a cooking fact</button>
+  </div>
+
+  <script>
+    const facts = [
+      "The first cookbook written by a woman was published in 1691 and includes recipes for fish, meat, and even a sponge cake.",
+      "Tomatoes were once considered poisonous in Europe because they belong to the nightshade family.",
+      "In Japan, there is a dish called \"sushi\" that originally meant \"sour rice\" and was invented to preserve fish.",
+      "Spices such as cinnamon, nutmeg, and cloves were once worth more than gold during the Middle Ages.",
+      "Carrots were originally purple, white, and yellow — orange carrots were bred in the 17th century.",
+      "The world's most expensive spice is saffron, because it takes about 150,000 flowers to make one pound.",
+      "The modern sandwich is named after the 4th Earl of Sandwich, who asked for meat between bread so he could play cards without using utensils.",
+      "Honey is the only natural food that never spoils; archaeologists have found edible honey in ancient Egyptian tombs.",
+      "Popcorn has been around for thousands of years and was enjoyed by ancient people in the Americas.",
+      "The so-called \"French\" in French fries refers to the cutting style, not necessarily the country of origin."
+    ];
+
+    const factElement = document.getElementById('fact');
+    const counterElement = document.getElementById('counter');
+    const button = document.getElementById('factButton');
+    let lastIndex = -1;
+
+    function showRandomFact() {
+      let randomIndex;
+      
+      // Prevent showing the same fact twice in a row
+      do {
+        randomIndex = Math.floor(Math.random() * facts.length);
+      } while (randomIndex === lastIndex && facts.length > 1);
+      
+      lastIndex = randomIndex;
+
+      // Fade out effect
+      factElement.classList.add('fade-out');
+
+      // Update after fade completes
+      setTimeout(() => {
+        factElement.textContent = facts[randomIndex];
+        counterElement.textContent = `Fact ${randomIndex + 1} of ${facts.length}`;
+        factElement.classList.remove('fade-out');
+      }, 150);
+    }
+
+    button.addEventListener('click', showRandomFact);
+
+    // Load initial fact on page load
+    showRandomFact();
+  </script>
+</body>
+</html>
